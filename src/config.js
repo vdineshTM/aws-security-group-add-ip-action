@@ -21,17 +21,17 @@ AWS.config.update({
   secretAccessKey,
 });
 
-core.debug(`Before AWS role: ${awsRoleArn}`);
+core.info(`Before AWS role: ${awsRoleArn}`);
 
-if (typeof awsRoleArn !== 'undefined') {
-  core.debug(`Inside AWS role`);
+if (awsRoleArn) {
+  core.info(`Inside AWS role`);
   const roleToAssume = {
     RoleArn: awsRoleArn,
     RoleSessionName: awsSessionName,
   };
-  //if (typeof awsDurationSeconds !== 'undefined') {
-  //  roleToAssume['DurationSeconds'] = awsDurationSeconds;
-  //}
+  if (awsDurationSeconds) {
+    roleToAssume['DurationSeconds'] = awsDurationSeconds;
+  }
   const sts = new AWS.STS();
   sts.assumeRole(roleToAssume, function(err, data) {
     if (err) {
@@ -45,7 +45,7 @@ if (typeof awsRoleArn !== 'undefined') {
     }
   });
 }
-core.debug(`After AWS role`);
+core.info(`After AWS role`);
 
 const ec2 = new EC2();
 

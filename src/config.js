@@ -36,12 +36,7 @@ if (awsRoleArn) {
     if (err) {
       core.setFailed(`Failed to assume role ${err}`);
     } else {
-      AWS.config.update({
-        accessKeyId: data.Credentials.AccessKeyId,
-        secretAccessKey: data.Credentials.SecretAccessKey,
-        sessionToken: data.Credentials.SessionToken
-      });
-      ec2 = new EC2(data.Credentials);
+      ec2 = new EC2({credentials: data.Credentials});
     }
   });
 } else {

@@ -21,7 +21,10 @@ AWS.config.update({
   secretAccessKey,
 });
 
+core.debug(`Before AWS role: ${awsRoleArn}`);
+
 if (typeof awsRoleArn !== 'undefined') {
+  core.debug(`Inside AWS role`);
   const roleToAssume = {
     RoleArn: awsRoleArn,
     RoleSessionName: awsSessionName,
@@ -42,6 +45,7 @@ if (typeof awsRoleArn !== 'undefined') {
     }
   });
 }
+core.debug(`After AWS role`);
 
 const ec2 = new EC2();
 

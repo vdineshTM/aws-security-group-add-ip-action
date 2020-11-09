@@ -5,6 +5,9 @@ const EC2 = require('aws-sdk/clients/ec2');
 const region = core.getInput('aws-region', { required: true });
 const accessKeyId = core.getInput('aws-access-key-id', { required: true });
 const secretAccessKey = core.getInput('aws-secret-access-key', { required: true });
+const awsRoleArn = core.getInput('aws-role-arn', { required: false });
+const awsSessionName = core.getInput('aws-session-name', { required: typeof awsRoleArn !== 'undefined'});
+const awsDurationSeconds = parseInt(core.getInput('aws-duration-seconds', { required: false }));
 const groupIds = core
   .getInput('aws-security-group-id', { required: true })
   .split(',')
@@ -17,6 +20,29 @@ AWS.config.update({
   accessKeyId,
   secretAccessKey,
 });
+
+if (typeof awsRoleArn !== 'undefined') {
+  const roleToAssume = {
+    RoleArn: awsRoleArn,
+    RoleSessionName: awsSessionName,
+  };
+  if (typeof awsDurationSeconds !== 'undefined') {
+    roleToAssume['DurationSeconds'] = awsDurationSeconds;
+  }
+  const sts = new AWS.STS();
+  sts.assumeRole(roleToAssume, function(err, data) {
+    if (err) {
+      core.setFailed(`Failed to assume role ${err}`);
+    } else {
+      AWS.config.update({
+        accessKeyId: data.Credentials.AccessKeyId,
+        secretAccessKey: data.Credentials.SecretAccessKey,
+        sessionToken: data.Credentials.SessionToken
+      });
+    }
+  });
+}
+
 const ec2 = new EC2();
 
 module.exports = {

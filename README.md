@@ -22,6 +22,18 @@ And it will remove the added ip address once the main job is completed.
 
 **Required** AWS Security Group (comma separated if multiple).
 
+### `aws-role-arn`
+
+AWS role ARN (Optional)
+
+### `aws-session-name`
+
+AWS role session name. Required if using an AWS role, otherwise this is ignored.
+
+### `aws-duration-seconds`
+
+The role session duration in seconds. Optional when used with an AWS role, and ignored if not.
+
 ### `port`
 
 The port which you want to allow. Default `"22"`.

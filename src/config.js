@@ -41,7 +41,7 @@ if (awsRoleArn) {
         secretAccessKey: data.Credentials.SecretAccessKey,
         sessionToken: data.Credentials.SessionToken
       };
-      core.info(`credentials: ${credentials}`);
+      core.info(`credentials: ${creds}`);
       ec2 = new EC2(creds);
     }
   });

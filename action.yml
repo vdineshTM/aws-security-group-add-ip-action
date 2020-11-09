@@ -17,6 +17,15 @@ inputs:
   aws-security-group-id:
     description: 'AWS Security Group'
     required: true
+  aws-role-arn:
+    description: "AWS role ARN"
+    required: false
+  aws-session-name:
+    description: "AWS role session name. Required if using an AWS role, otherwise this is ignored."
+    required: false
+  aws-duration-seconds:
+    description: "The role session duration in seconds. Optional when used with an AWS role, and ignored if not"
+    required: false
   port:
     description: 'The port which you want to allow'
     required: false

@@ -29,9 +29,9 @@ if (typeof awsRoleArn !== 'undefined') {
     RoleArn: awsRoleArn,
     RoleSessionName: awsSessionName,
   };
-  if (typeof awsDurationSeconds !== 'undefined') {
-    roleToAssume['DurationSeconds'] = awsDurationSeconds;
-  }
+  //if (typeof awsDurationSeconds !== 'undefined') {
+  //  roleToAssume['DurationSeconds'] = awsDurationSeconds;
+  //}
   const sts = new AWS.STS();
   sts.assumeRole(roleToAssume, function(err, data) {
     if (err) {

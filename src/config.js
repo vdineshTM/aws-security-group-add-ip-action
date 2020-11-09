@@ -36,8 +36,13 @@ if (awsRoleArn) {
     if (err) {
       core.setFailed(`Failed to assume role ${err}`);
     } else {
-      core.info(`Credentials: ${data.Credentials}`);
-      ec2 = new EC2({credentials: data.Credentials});
+      const creds = {
+        accessKeyId: data.Credentials.AccessKeyId,
+        secretAccessKey: data.Credentials.SecretAccessKey,
+        sessionToken: data.Credentials.SessionToken
+      };
+      core.info(`credentials: ${credentials}`);
+      ec2 = new EC2(creds);
     }
   });
 } else {

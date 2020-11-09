@@ -21,10 +21,9 @@ AWS.config.update({
   secretAccessKey,
 });
 
-core.info(`Before AWS role: ${awsRoleArn}`);
+let ec2;
 
 if (awsRoleArn) {
-  core.info(`Inside AWS role`);
   const roleToAssume = {
     RoleArn: awsRoleArn,
     RoleSessionName: awsSessionName,
@@ -42,12 +41,12 @@ if (awsRoleArn) {
         secretAccessKey: data.Credentials.SecretAccessKey,
         sessionToken: data.Credentials.SessionToken
       });
+      ec2 = new EC2(data.Credentials);
     }
   });
+} else {
+  ec2 = new EC2();
 }
-core.info(`After AWS role`);
-
-const ec2 = new EC2();
 
 module.exports = {
   region,

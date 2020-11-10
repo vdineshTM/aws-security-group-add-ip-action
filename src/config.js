@@ -32,10 +32,9 @@ if (awsRoleArn) {
     roleToAssume['DurationSeconds'] = awsDurationSeconds;
   }
   const sts = new AWS.STS();
-  sts.assumeRole(roleToAssume, function(err, data) {
-    if (err) {
-      core.setFailed(`Failed to assume role ${err}`);
-    } else {
+  const assumeRole = sts.assumeRole(roleToAssume).promise();
+  assumeRole.then(
+    function(data) {
       const creds = {
         accessKeyId: data.Credentials.AccessKeyId,
         secretAccessKey: data.Credentials.SecretAccessKey,
@@ -43,8 +42,11 @@ if (awsRoleArn) {
       };
       core.info(`credentials: ${creds}`);
       ec2 = new EC2(creds);
+    },
+    function(err){
+      core.setFailed(`Failed to assume role ${err}`);
     }
-  });
+  );
 } else {
   ec2 = new EC2();
 }

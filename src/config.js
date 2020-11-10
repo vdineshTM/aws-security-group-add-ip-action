@@ -43,6 +43,7 @@ async function getCredentials() {
         return creds;
       },
       function(err) {
+        console.log(err);
         core.setFailed(`Failed to assume role ${err}`);
       }
     );
